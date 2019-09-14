@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "theme-looper" "20190501.127" "Loop thru the available color-themes" '((emacs "24") (cl-lib "0.5")) :commit "388138a238fbab9b4bc5ada0300c9bc5ef63d3f1" :keywords '("convenience" "color-themes") :authors '(("Mohammed Ismail Ansari" . "team.terminal@gmail.com")) :maintainer '("Mohammed Ismail Ansari" . "team.terminal@gmail.com") :url "http://ismail.teamfluxion.com")

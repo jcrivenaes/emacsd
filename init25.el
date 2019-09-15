@@ -55,7 +55,7 @@
       backup-by-copying t)  ;; Copy all files, don't rename them.
 
 ;; Use shell's $PATH
-(exec-path-from-shell-copy-env "PATH")
+;; (exec-path-from-shell-copy-env "PATH")
 
 (global-linum-mode t)              ;; enable line numbers globally
 (setq linum-format "%4d \u2502 ")  ;; format line number spacing
@@ -195,12 +195,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da" default)))
  '(package-selected-packages
    (quote
-    (autopep8 theme-looper sublimity pyenv-mode projectile-speedbar minimap material-theme flycheck exec-path-from-shell elpy darcula-theme danneskjold-theme dakrone-theme column-enforce-mode better-defaults ample-theme)))
- '(pylint-options
-   (quote
-    ("--reports=n" "--output-format=parseable" "--rcfile ~/.pylintrc"))))
+    (sublimity pylint projectile-speedbar projectile minimap flycheck column-enforce-mode material-theme darcula-theme danneskjold-theme dakrone-theme ample-theme theme-looper pyenv-mode elpy exec-path-from-shell better-defaults))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -18,4 +18,8 @@
        (message "version 25")
        (setq custom-file "~/.emacs.d/init25.el")))
 
+(cond ((= emacs-major-version 26)
+       (message "version 26 (use 25)")
+       (setq custom-file "~/.emacs.d/init25.el")))
+
 (load custom-file)

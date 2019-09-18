@@ -1,6 +1,7 @@
 (package-initialize)
 
 (when (string= (getenv "USER") "jriv")
+  (message "USER is JRIV, resolve proxy...")
   (setq url-proxy-services
         '(("no_proxy" . "^\\(localhost\\|10.*\\)")
           ("http" . "www-proxy.statoil.no:80")

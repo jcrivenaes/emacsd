@@ -2,49 +2,71 @@
 ;; INSTALL PACKAGES
 ;;======================================================================================
 
+(when (string= (getenv "USER") "jriv")
+  (setq url-proxy-services
+        '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+          ("http" . "www-proxy.statoil.no:80")
+          ("https" . "www-proxy.statoil.no:80")))
+  )
+
+
 (require 'package)
 (message "Initialize init25.el")
 (add-to-list 'package-archives
              '("elpy" . "http://jorgenschaefer.github.io/packages/"))
 (add-to-list 'package-archives
-       '("melpa" . "https://melpa.org/packages/") t)
+       '("melpa" . "http://melpa.org/packages/") t)
+
+(add-to-list 'load-path "~/.emacs.d/aux")
+
+(message "..step1")
 
 ;; activate all packages
 (package-initialize)
 
+(message "..step2")
 ;; fetch the list of packages available
 (unless package-archive-contents
   (package-refresh-contents))
 
+(message "..step3")
+
 ;; define list of packages to install
 (defvar myPackages
-  '(better-defaults
-    exec-path-from-shell
-    elpy
-    pyenv-mode
+  '(elpy
     theme-looper
-    ample-theme
-    dakrone-theme
-    danneskjold-theme
     darcula-theme
+    ample-theme
     material-theme
     column-enforce-mode
     flycheck
-    minimap
-    projectile
-    projectile-speedbar
-    pylint
-    sublimity))
+    pylint))
 
+(message "..step4")
 ;; install all packages in list
 (mapc #'(lambda (package)
     (unless (package-installed-p package)
       (package-install package)))
       myPackages)
 
+(message "..step5")
+
 ;;======================================================================================
 ;; BASIC
 ;;======================================================================================
+(message "BASIC...")
+
+(when (string= (getenv "USER") "jriv")
+  ;; use one of these:
+  (load "/project/res/etc/emacs-modes/statoil-modes")
+  ;;(load "/private/jriv/work/svn/emacs-modes/statoil-modes-test")
+)
+
+;; Set default font
+(set-face-attribute 'default nil
+                    :height 140
+                    :weight 'normal
+                    :width 'normal)
 
 ;; backup
 (setq backup-directory-alist `(("." . "~/.saves")))
@@ -74,8 +96,6 @@
 ;; some settings
 (setq load-prefer-newer t)
 
-(add-to-list 'load-path "~/.emacs.d/aux")
-
 ;; backup
 (setq backup-directory-alist `(("." . "~/.saves")))
 (setq version-control t     ;; Use version numbers for backups.
@@ -85,22 +105,9 @@
       backup-by-copying t)  ;; Copy all files, don't rename them.
 
 ;;======================================================================================
-;; Sublimity
-;;======================================================================================
-(require 'sublimity)
-(require 'sublimity-scroll)
-(require 'sublimity-map) ;; experimental
-(require 'sublimity-attractive)
-(setq sublimity-map-size 20)
-(setq sublimity-map-fraction 0.3)
-(setq sublimity-map-text-scale -7)
-(add-hook 'sublimity-map-setup-hook
-          (lambda ()
-            (setq buffer-face-mode-face '(:family "Monospace"))
-            (buffer-face-mode)))
-;;======================================================================================
 ;; F keys
 ;;======================================================================================
+(message "F keys")
 
 (global-set-key '[(f1)]          'comment-dwim)
 
@@ -130,19 +137,18 @@
 ;;======================================================================================
 ;; THEMES
 ;;======================================================================================
+(message "THEMES....")
 
 (setq inhibit-startup-message t)   ;; hide the startup message
 (load-theme 'material t)           ;; load material theme
-(load-theme 'ample t t)           ;; load material theme
-(load-theme 'ample-flat t t)
-(load-theme 'ample-light t t)
-(load-theme 'danneskjold t t)
 (load-theme 'darcula t t)
+(load-theme 'ample t t)
 (enable-theme 'ample)
 
 ;;======================================================================================
 ;; ELPY and PYTHON
 ;;======================================================================================
+(message "ELPY etc...")
 
 (elpy-enable)
 (setq elpy-rpc-backend "rope")
@@ -157,10 +163,6 @@
 (when (require 'flycheck nil t)
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (add-hook 'elpy-mode-hook 'flycheck-mode))
-
-(pyenv-mode)
-(setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "-i --simple-prompt")
 
 (add-hook 'python-mode-hook
       (lambda ()
@@ -183,27 +185,22 @@
 ;; C code
 ;;======================================================================================
 ;; Change the indentation amount to 4 spaces instead of 2.
+(message "C code...")
+
 (setq-default c-basic-offset 4)
 (setq c-recognize-knr-p nil)
 
 ;; ;;======================================================================================
 ;; ;; CUSTOM SET aka Don't FUZZ
 ;; ;;======================================================================================
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da" default)))
  '(package-selected-packages
    (quote
-    (sublimity pylint projectile-speedbar projectile minimap flycheck column-enforce-mode material-theme darcula-theme danneskjold-theme dakrone-theme ample-theme theme-looper pyenv-mode elpy exec-path-from-shell better-defaults)))
- '(pylint-options
-   (quote
-    ("--reports=n" "--output-format=parseable" "--rcfile=~/.pylintrc"))))
+    (pylint flycheck column-enforce-mode material-theme ample-theme darcula-theme theme-looper elpy))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

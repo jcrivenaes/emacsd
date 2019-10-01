@@ -1,4 +1,3 @@
-(package-initialize)
 
 (when (string= (getenv "USER") "jriv")
   (message "USER is JRIV, resolve proxy...")

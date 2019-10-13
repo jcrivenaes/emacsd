@@ -191,20 +191,13 @@
 (setq-default c-basic-offset 4)
 (setq c-recognize-knr-p nil)
 
-;; ;;======================================================================================
-;; ;; CUSTOM SET aka Don't FUZZ
-;; ;;======================================================================================
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (pylint flycheck column-enforce-mode material-theme ample-theme darcula-theme theme-looper elpy))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;;======================================================================================
+;; LOCAL CUSTOM SET shall not be part .git
+;;======================================================================================
+
+(cond ((= emacs-major-version 25)
+       (message "version 25 local")
+       (setq custom-file "~/.emacs.d/init25_local.el")))
+
+
+(load custom-file)

@@ -40,6 +40,7 @@
     material-theme
     column-enforce-mode
     flycheck
+    projectile
     pylint))
 
 (message "..step4")

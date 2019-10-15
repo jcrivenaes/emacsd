@@ -15,7 +15,7 @@
 (add-to-list 'package-archives
              '("elpy" . "http://jorgenschaefer.github.io/packages/"))
 (add-to-list 'package-archives
-       '("melpa" . "http://melpa.org/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 
 (add-to-list 'load-path "~/.emacs.d/aux")
 
@@ -40,6 +40,9 @@
     material-theme
     column-enforce-mode
     flycheck
+    yaml-mode
+    flycheck-yamllint
+    el-get
     pylint))
 
 (message "..step4")
@@ -193,3 +196,7 @@
 ;; ;;======================================================================================
 ;; ;; CUSTOM SET aka Don't FUZZ
 ;; ;;======================================================================================
+(cond ((= emacs-major-version 24)
+       (message "version 24 local")
+       (setq custom-file "~/.emacs.d/init24_local.el"))
+      (load custom-file))

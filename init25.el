@@ -41,6 +41,8 @@
     column-enforce-mode
     flycheck
     projectile
+    yaml-mode
+    flycheck-yamllint
     pylint))
 
 (message "..step4")

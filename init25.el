@@ -41,8 +41,14 @@
     column-enforce-mode
     flycheck
     projectile
+    irony
+    irony-eldoc
+    company
+    company-irony
+    flycheck-irony
     yaml-mode
     flycheck-yamllint
+    smartparens
     pylint))
 
 (message "..step4")
@@ -107,6 +113,17 @@
       delete-old-versions t ;; Don't ask to delete excess backup versions.
       backup-by-copying t)  ;; Copy all files, don't rename them.
 
+;; smartparents
+(require 'smartparens-config)
+(show-smartparens-global-mode +1)
+(smartparens-global-mode 1)
+
+;; when you press RET, the curly braces automatically
+;; add another newline
+(sp-with-modes '(c-mode c++-mode)
+  (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
+                                            ("* ||\n[i]" "RET"))))
 ;;======================================================================================
 ;; F keys
 ;;======================================================================================
@@ -189,9 +206,36 @@
 ;;======================================================================================
 ;; Change the indentation amount to 4 spaces instead of 2.
 (message "C code...")
+(setq c-default-style "stroustrup")
 
-(setq-default c-basic-offset 4)
-(setq c-recognize-knr-p nil)
+;; irony
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
+;; Windows performance tweaks for irony
+;;
+(when (boundp 'w32-pipe-read-delay)
+  (setq w32-pipe-read-delay 0))
+
+;; Set the buffer size to 64K on Windows (from the original 4K)
+(when (boundp 'w32-pipe-buffer-size)
+  (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
+
+(add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'c-mode-hook 'company-mode)
+
+(add-hook 'c++-mode-hook 'flycheck-mode)
+(add-hook 'c-mode-hook 'flycheck-mode)
+(eval-after-load 'company
+  '(add-to-list 'company-backends 'company-irony))
+
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
+
+;; eldoc-mode
+(add-hook 'irony-mode-hook 'irony-eldoc)
 
 ;;======================================================================================
 ;; LOCAL CUSTOM SET shall not be part .git

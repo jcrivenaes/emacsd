@@ -1,5 +1,9 @@
 elpa
+elpy
+irony
 auto-save-list
 *~
 session*
 snippets
+init25_local.el
+init24_local.el

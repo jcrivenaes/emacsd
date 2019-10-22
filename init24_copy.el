@@ -11,11 +11,11 @@
 
 
 (require 'package)
-(message "Initialize init25.el")
+(message "Initialize init24.el")
 (add-to-list 'package-archives
              '("elpy" . "http://jorgenschaefer.github.io/packages/"))
 (add-to-list 'package-archives
-       '("melpa" . "http://melpa.org/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 
 (add-to-list 'load-path "~/.emacs.d/aux")
 
@@ -40,15 +40,9 @@
     material-theme
     column-enforce-mode
     flycheck
-    projectile
-    irony
-    irony-eldoc
-    company
-    company-irony
-    flycheck-irony
     yaml-mode
     flycheck-yamllint
-    smartparens
+    el-get
     pylint))
 
 (message "..step4")
@@ -113,17 +107,31 @@
       delete-old-versions t ;; Don't ask to delete excess backup versions.
       backup-by-copying t)  ;; Copy all files, don't rename them.
 
-;; smartparents
-(require 'smartparens-config)
-(show-smartparens-global-mode +1)
-(smartparens-global-mode 1)
+(defun shift-region (distance)
+  (let ((mark (mark)))
+    (save-excursion
+      (indent-rigidly (region-beginning) (region-end) distance)
+      (push-mark mark t t)
+      ;; Tell the command loop not to deactivate the mark
+      ;; for transient mark mode
+      (setq deactivate-mark nil))))
 
-;; when you press RET, the curly braces automatically
-;; add another newline
-(sp-with-modes '(c-mode c++-mode)
-  (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
-                                            ("* ||\n[i]" "RET"))))
+(defun shift-right ()
+  (interactive)
+  (shift-region 1))
+
+(defun shift-left ()
+  (interactive)
+  (shift-region -1))
+
+;; Bind (shift-right) and (shift-left) function to your favorite keys. I use
+;; the following so that Ctrl-Shift-Right Arrow moves selected text one
+;; column to the right, Ctrl-Shift-Left Arrow moves selected text one
+;; column to the left:
+
+(global-set-key [C-S-right] 'shift-right)
+(global-set-key [C-S-left] 'shift-left)
+
 ;;======================================================================================
 ;; F keys
 ;;======================================================================================
@@ -136,6 +144,8 @@
 (global-set-key '[(f3)]          'whitespace-mode)
 
 (global-set-key '[(f4)]          'find-file-at-point)
+(global-set-key '[(ctrl f4)]     'shift-right)
+(global-set-key '[(shift f4)]    'shift-left)
 
 (global-set-key '[(f5)]          'hc-toggle-highlight-tabs)
 (global-set-key '[(f6)]          'hc-toggle-highlight-trailing-whitespace)
@@ -206,44 +216,32 @@
 ;;======================================================================================
 ;; Change the indentation amount to 4 spaces instead of 2.
 (message "C code...")
-(setq c-default-style "stroustrup")
 
-;; irony
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(setq-default c-basic-offset 4)
+(setq c-recognize-knr-p nil)
 
-;; Windows performance tweaks for irony
-;;
-(when (boundp 'w32-pipe-read-delay)
-  (setq w32-pipe-read-delay 0))
-
-;; Set the buffer size to 64K on Windows (from the original 4K)
-(when (boundp 'w32-pipe-buffer-size)
-  (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
-
-(add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'c-mode-hook 'company-mode)
-
-(add-hook 'c++-mode-hook 'flycheck-mode)
-(add-hook 'c-mode-hook 'flycheck-mode)
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony))
-
-(eval-after-load 'flycheck
-  '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-
-;; eldoc-mode
-(add-hook 'irony-mode-hook 'irony-eldoc)
-
-;;======================================================================================
-;; LOCAL CUSTOM SET shall not be part .git
-;;======================================================================================
-
-(cond ((= emacs-major-version 25)
-       (message "version 25 local")
-       (setq custom-file "~/.emacs.d/init25_local.el")))
-
-
-(load custom-file)
+;; ;;======================================================================================
+;; ;; CUSTOM SET aka Don't FUZZ
+;; ;;======================================================================================
+<<<<<<< HEAD
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(elpy-rpc-timeout 3)
+ '(pylint-options
+   (quote
+    ("--reports=n" "--output-format=parseable" "--rcfile=~/.pylintrc"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+=======
+(cond ((= emacs-major-version 24)
+       (message "version 24 local")
+       (setq custom-file "~/.emacs.d/init24_local.el"))
+      (load custom-file))
+>>>>>>> 1d6a49ea9af93c1911ad5813d6bd9383cafdafbd

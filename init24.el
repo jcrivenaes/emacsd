@@ -223,22 +223,6 @@
 ;; ;;======================================================================================
 ;; ;; CUSTOM SET aka Don't FUZZ
 ;; ;;======================================================================================
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(elpy-rpc-timeout 3)
- '(pylint-options
-   (quote
-    ("--reports=n" "--output-format=parseable" "--rcfile=~/.pylintrc"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-=======
 (cond ((= emacs-major-version 24)
        (message "version 24 local")
-       (setq custom-file "~/.emacs.d/init24_local.el"))
+       (setq custom-file "~/.emacs.d/init24_local.el")))

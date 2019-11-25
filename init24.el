@@ -51,6 +51,7 @@
     ;; company-irony
     ;; flycheck-irony
     smartparens
+    toml-mode
     pylint))
 
 (message "..step4")

@@ -36,22 +36,13 @@
   '(elpy
     theme-looper
     darcula-theme
-    badwolf-theme
     ample-theme
     material-theme
-    cmake-mode
     column-enforce-mode
     flycheck
     yaml-mode
     flycheck-yamllint
     el-get
-    ;; irony
-    ;; irony-eldoc
-    company
-    ;; company-irony
-    ;; flycheck-irony
-    smartparens
-    toml-mode
     pylint))
 
 (message "..step4")
@@ -133,25 +124,18 @@
   (interactive)
   (shift-region -1))
 
-;; smartparents
-(require 'smartparens-config)
-(show-smartparens-global-mode +1)
-(smartparens-global-mode 1)
-
-;; when you press RET, the curly braces automatically
-;; add another newline
-(sp-with-modes '(c-mode c++-mode)
-  (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-  (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
-                                            ("* ||\n[i]" "RET"))))
-
-;;======================================================================================
-;; F keys etc
-;;======================================================================================
-(message "F keys etc")
+;; Bind (shift-right) and (shift-left) function to your favorite keys. I use
+;; the following so that Ctrl-Shift-Right Arrow moves selected text one
+;; column to the right, Ctrl-Shift-Left Arrow moves selected text one
+;; column to the left:
 
 (global-set-key [C-S-right] 'shift-right)
 (global-set-key [C-S-left] 'shift-left)
+
+;;======================================================================================
+;; F keys
+;;======================================================================================
+(message "F keys")
 
 (global-set-key '[(f1)]          'comment-dwim)
 
@@ -228,53 +212,36 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;;======================================================================================
-;; CMAKE code
-;;======================================================================================
-(setq load-path (cons (expand-file-name "/dir/with/cmake-mode") load-path))
-(require 'cmake-mode)
-
-;;======================================================================================
 ;; C code
 ;;======================================================================================
-
 ;; Change the indentation amount to 4 spaces instead of 2.
 (message "C code...")
-(message "C code...")
-(setq c-default-style "stroustrup")
 
-;; ;; irony
-;; (add-hook 'c++-mode-hook 'irony-mode)
-;; (add-hook 'c-mode-hook 'irony-mode)
-;; (add-hook 'objc-mode-hook 'irony-mode)
-;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-;; Windows performance tweaks for irony
-;;
-(when (boundp 'w32-pipe-read-delay)
-  (setq w32-pipe-read-delay 0))
-
-;; Set the buffer size to 64K on Windows (from the original 4K)
-(when (boundp 'w32-pipe-buffer-size)
-  (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
-
-(add-hook 'after-init-hook 'global-company-mode)
-(add-hook 'c-mode-hook 'company-mode)
-
-(add-hook 'c++-mode-hook 'flycheck-mode)
-(add-hook 'c-mode-hook 'flycheck-mode)
-;; (eval-after-load 'company
-;;   '(add-to-list 'company-backends 'company-irony))
-
-;; (eval-after-load 'flycheck
-;;   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-
-;; eldoc-mode
-(add-hook 'irony-mode-hook 'irony-eldoc)
-
+(setq-default c-basic-offset 4)
+(setq c-recognize-knr-p nil)
 
 ;; ;;======================================================================================
 ;; ;; CUSTOM SET aka Don't FUZZ
 ;; ;;======================================================================================
+<<<<<<< HEAD
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(elpy-rpc-timeout 3)
+ '(pylint-options
+   (quote
+    ("--reports=n" "--output-format=parseable" "--rcfile=~/.pylintrc"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+=======
 (cond ((= emacs-major-version 24)
        (message "version 24 local")
-       (setq custom-file "~/.emacs.d/init24_local.el")))
+       (setq custom-file "~/.emacs.d/init24_local.el"))
+      (load custom-file))
+>>>>>>> 1d6a49ea9af93c1911ad5813d6bd9383cafdafbd

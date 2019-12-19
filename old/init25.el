@@ -85,8 +85,22 @@
       delete-old-versions t ;; Don't ask to delete excess backup versions.
       backup-by-copying t)  ;; Copy all files, don't rename them.
 
-;; Use shell's $PATH
-;; (exec-path-from-shell-copy-env "PATH")
+(defun shift-region (distance)
+  (let ((mark (mark)))
+    (save-excursion
+      (indent-rigidly (region-beginning) (region-end) distance)
+      (push-mark mark t t)
+      ;; Tell the command loop not to deactivate the mark
+      ;; for transient mark mode
+      (setq deactivate-mark nil))))
+
+(defun shift-right ()
+  (interactive)
+  (shift-region 1))
+
+(defun shift-left ()
+  (interactive)
+  (shift-region -1))
 
 (global-linum-mode t)              ;; enable line numbers globally
 (setq linum-format "%4d \u2502 ")  ;; format line number spacing
@@ -106,13 +120,6 @@
 (setq load-prefer-newer t)
 
 ;; backup
-(setq backup-directory-alist `(("." . "~/.saves")))
-(setq version-control t     ;; Use version numbers for backups.
-      kept-new-versions 10  ;; Number of newest versions to keep.
-      kept-old-versions 0   ;; Number of oldest versions to keep.
-      delete-old-versions t ;; Don't ask to delete excess backup versions.
-      backup-by-copying t)  ;; Copy all files, don't rename them.
-
 ;; smartparents
 (require 'smartparens-config)
 (show-smartparens-global-mode +1)
@@ -125,9 +132,12 @@
   (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
                                             ("* ||\n[i]" "RET"))))
 ;;======================================================================================
-;; F keys
+;; F keys etc
 ;;======================================================================================
-(message "F keys")
+(message "F keys etc")
+
+(global-set-key [C-S-right] 'shift-right)
+(global-set-key [C-S-left] 'shift-left)
 
 (global-set-key '[(f1)]          'comment-dwim)
 

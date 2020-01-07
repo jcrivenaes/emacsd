@@ -186,6 +186,7 @@
 
 (elpy-enable)
 (setq elpy-rpc-backend "rope")
+(setq elpy-rpc-virtualenv-path 'current)
 
 ;; Fixing another key binding bug in iedit mode
 (define-key global-map (kbd "C-c o") 'iedit-mode)

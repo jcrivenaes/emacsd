@@ -37,7 +37,9 @@
     irony-eldoc
     company
     company-irony
+    clang-format
     flycheck-irony
+    flycheck-clang-analyzer
     yaml-mode
     flycheck-yamllint
     smartparens
@@ -116,35 +118,23 @@
   (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
   (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
                                             ("* ||\n[i]" "RET"))))
-;;======================================================================================
-;; F keys
-;;======================================================================================
-(message "F keys")
 
-(global-set-key '[(f1)]          'comment-dwim)
+(defun shift-region (distance)
+  (let ((mark (mark)))
+    (save-excursion
+      (indent-rigidly (region-beginning) (region-end) distance)
+      (push-mark mark t t)
+      ;; Tell the command loop not to deactivate the mark
+      ;; for transient mark mode
+      (setq deactivate-mark nil))))
 
-(global-set-key '[(f2)]          'column-number-mode)
+(defun shift-right ()
+  (interactive)
+  (shift-region 1))
 
-(global-set-key '[(f3)]          'whitespace-mode)
-
-(global-set-key '[(f4)]          'find-file-at-point)
-
-(global-set-key '[(f5)]          'hc-toggle-highlight-tabs)
-(global-set-key '[(f6)]          'hc-toggle-highlight-trailing-whitespace)
-
-(global-set-key [f7]             'minimap-mode)
-
-(global-set-key '[(f8)]          'undo)
-
-(global-set-key '[(f9)]          'elpy-black-fix-code)
-(global-set-key '[(ctrl f9)]     'pylint)
-(global-set-key '[(shift f9)]    'minimap-mode)
-
-(global-set-key '[(f10)]         'column-enforce-mode)
-(global-set-key '[(f11)]         'theme-looper-enable-next-theme)
-(global-set-key '[(f12)]         'text-scale-increase)
-(global-set-key '[(shift f12)]   'text-scale-decrease)
-
+(defun shift-left ()
+  (interactive)
+  (shift-region -1))
 
 ;;======================================================================================
 ;; THEMES
@@ -201,9 +191,9 @@
 (setq c-default-style "stroustrup")
 
 ;; irony
-(add-hook 'c++-mode-hook 'irony-mode)
+;; (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
+;; (add-hook 'objc-mode-hook 'irony-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
 ;; Windows performance tweaks for irony
@@ -226,8 +216,68 @@
 (eval-after-load 'flycheck
   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
 
+(with-eval-after-load 'flycheck
+  (require 'flycheck-clang-analyzer)
+  (flycheck-clang-analyzer-setup))
+
 ;; eldoc-mode
 (add-hook 'irony-mode-hook 'irony-eldoc)
+
+(defun cppchk()
+  (interactive)
+  (flycheck-select-checker 'c/c++-cppcheck))
+
+(defun clangchk()
+  (interactive)
+  (flycheck-select-checker 'c/c++-clang))
+
+(require 'clang-format)
+;; (setq clang-format-style-option "llvm")
+
+;;======================================================================================
+;; SWIG mode
+;;======================================================================================
+
+(message "SWIG code...")
+
+(require 'swig-mode)
+(add-to-list 'auto-mode-alist '("\\.i\\'" . swig-mode))
+
+;;======================================================================================
+;; F keys
+;;======================================================================================
+(message "F keys")
+
+(global-set-key '[(f1)]          'comment-dwim)
+
+(global-set-key '[(f2)]          'column-number-mode)
+
+(global-set-key '[(f3)]          'whitespace-mode)
+
+(global-set-key '[(f4)]          'find-file-at-point)
+(global-set-key '[(ctrl f4)]     'shift-right)
+(global-set-key '[(shift f4)]    'shift-left)
+
+
+(global-set-key '[(f5)]          'hc-toggle-highlight-tabs)
+(global-set-key '[(f6)]          'hc-toggle-highlight-trailing-whitespace)
+
+(global-set-key [f7]             'minimap-mode)
+(global-set-key '[(shift f7)]         'column-enforce-mode)
+
+(global-set-key '[(f8)]          'undo)
+
+(global-set-key '[(f9)]          'elpy-black-fix-code)
+(global-set-key '[(ctrl f9)]     'pylint)
+(global-set-key '[(shift f9)]    'minimap-mode)
+
+(global-set-key '[(f10)]         'clang-format-buffer)
+(global-set-key '[(ctrl f10)]    'cppchk)
+(global-set-key '[(shift f10)]   'clangchk)
+(global-set-key '[(f11)]         'theme-looper-enable-next-theme)
+(global-set-key '[(f12)]         'text-scale-increase)
+(global-set-key '[(shift f12)]   'text-scale-decrease)
+
 
 ;;======================================================================================
 ;; LOCAL CUSTOM SET shall not be part .git

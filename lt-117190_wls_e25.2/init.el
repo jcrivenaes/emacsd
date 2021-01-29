@@ -41,6 +41,7 @@
     irony-eldoc
     company
     company-irony
+    clang-format
     flycheck-irony
     yaml-mode
     flycheck-yamllint
@@ -115,35 +116,6 @@
   (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
   (sp-local-pair "/*" "*/" :post-handlers '((" | " "SPC")
                                             ("* ||\n[i]" "RET"))))
-;;======================================================================================
-;; F keys
-;;======================================================================================
-(message "F keys")
-
-(global-set-key '[(f1)]          'comment-dwim)
-
-(global-set-key '[(f2)]          'column-number-mode)
-
-(global-set-key '[(f3)]          'whitespace-mode)
-
-(global-set-key '[(f4)]          'find-file-at-point)
-
-(global-set-key '[(f5)]          'hc-toggle-highlight-tabs)
-(global-set-key '[(f6)]          'hc-toggle-highlight-trailing-whitespace)
-
-(global-set-key [f7]             'minimap-mode)
-
-(global-set-key '[(f8)]          'undo)
-
-(global-set-key '[(f9)]          'elpy-black-fix-code)
-(global-set-key '[(ctrl f9)]     'pylint)
-(global-set-key '[(shift f9)]    'minimap-mode)
-
-(global-set-key '[(f10)]         'column-enforce-mode)
-(global-set-key '[(f11)]         'theme-looper-enable-next-theme)
-(global-set-key '[(f12)]         'text-scale-increase)
-(global-set-key '[(shift f12)]   'text-scale-decrease)
-
 
 ;;======================================================================================
 ;; THEMES
@@ -227,6 +199,38 @@
 
 ;; eldoc-mode
 (add-hook 'irony-mode-hook 'irony-eldoc)
+
+(require 'clang-format)
+
+;;======================================================================================
+;; F keys
+;;======================================================================================
+(message "F keys")
+
+(global-set-key '[(f1)]          'comment-dwim)
+
+(global-set-key '[(f2)]          'column-number-mode)
+
+(global-set-key '[(f3)]          'whitespace-mode)
+
+(global-set-key '[(f4)]          'find-file-at-point)
+
+(global-set-key '[(f5)]          'hc-toggle-highlight-tabs)
+(global-set-key '[(f6)]          'hc-toggle-highlight-trailing-whitespace)
+
+(global-set-key [f7]             'minimap-mode)
+(global-set-key '[(shift f7)]    'column-enforce-mode)
+
+(global-set-key '[(f8)]          'undo)
+
+(global-set-key '[(f9)]          'elpy-black-fix-code)
+(global-set-key '[(ctrl f9)]     'pylint)
+(global-set-key '[(shift f9)]    'minimap-mode)
+
+(global-set-key '[(f10)]         'clang-format-buffer)
+(global-set-key '[(f11)]         'theme-looper-enable-next-theme)
+(global-set-key '[(f12)]         'text-scale-increase)
+(global-set-key '[(shift f12)]   'text-scale-decrease)
 
 ;;======================================================================================
 ;; LOCAL CUSTOM SET shall not be part .git
